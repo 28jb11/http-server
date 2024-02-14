@@ -43,12 +43,21 @@
     </style>
 </head>
 <body>
-    <h1>Index</h1>
-    <form action="/newInvoice" method="post">
-        <input type="submit" value="New Invoice">
-    </form>
+    <h1>Add New Customer</h1>
     <form action="/newCustomer" method="post">
-        <input type="submit" value="New Customer">
+        <label for="FirstName">First Name:</label>
+        <input type="text" id="FirstName" name="FirstName" required><br>
+        
+        <label for="LastName">Last Name:</label>
+        <input type="text" id="LastName" name="LastName" required><br>
+
+        <label for="Email">Email:</label>
+        <input type="Email" id="Email" name="Email" required><br>
+        
+        <label for="Phone">Phone Number:</label>
+        <input type="tel" id="Phone" name="Phone" pattern="^(0[2-5])?[0-9]{8}$" required><br>
+        
+        <input type="submit" value="Add Customer">
     </form>
     {{ if ne .ErrorMessage "" }}
         <p>{{ .ErrorMessage }}</p>
