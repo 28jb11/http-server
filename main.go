@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -12,8 +13,17 @@ import (
 var db *sql.DB
 var tpl *template.Template
 
+type CustomerRecord struct {
+	CustomerID int
+	FirstName  string
+	LastName   string
+	Email      string
+	Phone      string
+}
+
 type PageData struct {
 	ErrorMessage string
+	Customers    []CustomerRecord
 }
 
 func init() {
@@ -43,7 +53,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/newInvoice", newInvoiceHandler)
-	http.HandleFunc("/newCustomer", newCustomerHandler)
+	http.HandleFunc("/customers", customerHandler)
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -63,15 +73,38 @@ func newInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "newInvoice.gohtml", data)
 }
 
-func newCustomerHandler(w http.ResponseWriter, r *http.Request) {
+func customerHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	switch r.Method {
 	case "GET":
-		// Display the form
-		tpl.ExecuteTemplate(w, "newCustomer.gohtml", PageData{})
+		fmt.Println("get case")
+		rows, err := db.Query("SELECT CustomerID, FirstName, LastName, Email, Phone FROM Customers")
+		if err != nil {
+			fmt.Println("db.Query error")
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+
+		var customers []CustomerRecord
+
+		for rows.Next() {
+			var customer CustomerRecord
+			err := rows.Scan(&customer.CustomerID, &customer.FirstName, &customer.LastName, &customer.Email, &customer.Phone)
+			if err != nil {
+				fmt.Println("rows.Scan error")
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+				return
+			}
+			customers = append(customers, customer)
+		}
+
+		// Pass the customers to the template
+		tpl.ExecuteTemplate(w, "customers.gohtml", PageData{Customers: customers})
+
 	case "POST":
-		// Process the form submission
+		fmt.Println("post case")
 		err := r.ParseForm()
 		if err != nil {
 			http.Error(w, "Bad Request", http.StatusBadRequest)
@@ -99,9 +132,14 @@ func newCustomerHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Redirect to a success page or redisplay the form with a success message
-		tpl.ExecuteTemplate(w, "newCustomer.gohtml", PageData{})
+		// // Redirect to a success page or redisplay the form with a success message
+		// tpl.ExecuteTemplate(w, "customers.gohtml", PageData{})
+
+		// Redirect to the same endpoint to refresh the page
+		http.Redirect(w, r, "/customers", http.StatusSeeOther)
 	default:
+		fmt.Printf("Received unexpected method: %s\n", r.Method)
+		fmt.Println("default case")
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
 }

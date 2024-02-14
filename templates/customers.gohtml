@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/../static/styles.css">
-    <title>Login Page</title>
+    <title>Customers</title>
 </head>
 <body>
-    <h1>Add New Customer</h1>
-    <form action="/newCustomer" method="post">
+    <h1>Customers</h1>
+    <form action="/customers" method="post">
         <label for="FirstName">First Name:</label>
         <input type="text" id="FirstName" name="FirstName" required><br>
         
@@ -23,7 +23,34 @@
         
         <input type="submit" value="Add Customer">
     </form>
-    {{ if ne .ErrorMessage "" }}
+<ul>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{ range .Customers }}
+            <tr>
+                <td>{{ .CustomerID }}</td>
+                <td>{{ .FirstName }}</td>
+                <td>{{ .LastName }}</td>
+                <td>{{ .Email }}</td>
+                <td>{{ .Phone }}</td>
+            </tr>
+        {{ else }}
+            <tr>
+                <td colspan="5">No customers found.</td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
+{{ if ne .ErrorMessage "" }}
         <p>{{ .ErrorMessage }}</p>
     {{ end }}
 </body>

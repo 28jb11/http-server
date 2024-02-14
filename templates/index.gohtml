@@ -4,51 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin:  0;
-            padding:  0;
-        }
-        h1 {
-            text-align: center;
-            padding:  20px  0;
-            background-color: #333;
-            color: #fff;
-        }
-        form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding:  20px;
-        }
-        input[type="submit"] {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding:  15px  32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size:  16px;
-            margin:  4px  2px;
-            cursor: pointer;
-        }
-        p {
-            text-align: center;
-            color: #ff0000;
-        }
-    </style>
+    <link rel="stylesheet" href="/../static/styles.css">
 </head>
 <body>
     <h1>Index</h1>
     <form action="/newInvoice" method="post">
         <input type="submit" value="New Invoice">
     </form>
-    <form action="/newCustomer" method="post">
-        <input type="submit" value="New Customer">
+    <form action="/customers" method="post">
+        <input type="submit" value="Customers">
     </form>
     {{ if ne .ErrorMessage "" }}
         <p>{{ .ErrorMessage }}</p>
