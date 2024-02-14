@@ -34,8 +34,8 @@ tr:nth-child(even) {
 }
 /* Form styles */
 .customer-form {
-    max-width: 400px;
-    margin: 0 auto;
+    width: 400px;
+    margin: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -52,12 +52,15 @@ label {
 
 input[type="text"],
 input[type="email"],
-input[type="tel"] {
+input[type="tel"],
+input[type="submit"]{
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    /* margin-right: 20px; */
+    box-sizing: border-box;
 }
 
 input[type="submit"] {
@@ -69,6 +72,7 @@ input[type="submit"] {
     color: #fff;
     font-size: 16px;
     cursor: pointer;
+    /* margin-right: 20px; */
 }
 
 input[type="submit"]:hover {
