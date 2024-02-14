@@ -7,13 +7,15 @@ body {
 }
 h1 {
     text-align: center;
-    padding:  20px  0;
+    margin: auto;
+    padding:  0px  0;
     background-color: #333;
     color: #fff;
 }
 /* Table */
 table {
-    width: 100%;
+    margin: auto;
+    width: calc(100% - 200px);
     border-collapse: collapse;
 }
 /* Table headers */
@@ -35,7 +37,7 @@ tr:nth-child(even) {
 /* Form styles */
 .customer-form {
     width: 400px;
-    margin: 20px;
+    margin: auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -59,7 +61,6 @@ input[type="submit"]{
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-    /* margin-right: 20px; */
     box-sizing: border-box;
 }
 
@@ -72,9 +73,31 @@ input[type="submit"] {
     color: #fff;
     font-size: 16px;
     cursor: pointer;
-    /* margin-right: 20px; */
 }
 
 input[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+details {
+  text-align: center;
+}
+
+summary {
+  display: inline-block;
+  width: fit-content; /* Ensure summary only takes the width of its content */
+  cursor: pointer;
+  padding: 10px;
+}
+
+/* Custom styling for summary arrow */
+summary::-webkit-details-marker {
+  display: none; /* Hide default arrow in WebKit browsers */
+}
+
+summary::before {
+  /* content: '▼'; /* Custom arrow icon */ */
+  display: inline-block;
+  margin-right: 5px; /* Add space between arrow and text */
+  transform: rotate(90deg); /* Rotate arrow to point down */
 }
