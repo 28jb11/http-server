@@ -40,6 +40,7 @@ type NewCustomer struct {
 }
 
 func main() {
+	http.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/newInvoice", newInvoiceHandler)
 	http.HandleFunc("/newCustomer", newCustomerHandler)
