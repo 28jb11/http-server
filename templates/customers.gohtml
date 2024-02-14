@@ -8,22 +8,32 @@
 </head>
 <body>
     <h1>Customers</h1>
-    <form action="/customers" method="post">
-        <label for="FirstName">First Name:</label>
-        <input type="text" id="FirstName" name="FirstName" required><br>
-        
-        <label for="LastName">Last Name:</label>
-        <input type="text" id="LastName" name="LastName" required><br>
-
-        <label for="Email">Email:</label>
-        <input type="Email" id="Email" name="Email" required><br>
-        
-        <label for="Phone">Phone Number:</label>
-        <input type="tel" id="Phone" name="Phone" pattern="^(0[2-5])?[0-9]{8}$" required><br>
-        
-        <input type="submit" value="Add Customer">
-    </form>
 <ul>
+<form action="/customers" method="post" class="customer-form">
+        <div class="form-group">
+            <label for="FirstName">First Name:</label>
+            <input type="text" id="FirstName" name="FirstName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="LastName">Last Name:</label>
+            <input type="text" id="LastName" name="LastName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input type="email" id="Email" name="Email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Phone">Phone Number:</label>
+            <input type="tel" id="Phone" name="Phone" pattern="^(0[2-5])?[0-9]{8}$" required>
+        </div>
+        
+        <div class="form-group">
+            <input type="submit" value="Add Customer">
+        </div>
+    </form>
 <table>
     <thead>
         <tr>

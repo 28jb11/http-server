@@ -11,25 +11,66 @@ h1 {
     background-color: #333;
     color: #fff;
 }
-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding:  20px;
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
+/* Table headers */
+th {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px;
+    text-align: left;
+}
+/* Table cells */
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+/* Alternating row colors */
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+/* Form styles */
+.customer-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
 input[type="submit"] {
-    background-color: #4CAF50;
+    width: 100%;
+    padding: 10px;
     border: none;
-    color: white;
-    padding:  15px  32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size:  16px;
-    margin:  4px  2px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
     cursor: pointer;
 }
-p {
-    text-align: center;
-    color: #ff0000;
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
 }

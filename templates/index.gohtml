@@ -1,18 +1,18 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>login page</title>
     <link rel="stylesheet" href="/../static/styles.css">
 </head>
 <body>
-    <h1>Index</h1>
-    <form action="/newInvoice" method="post">
-        <input type="submit" value="New Invoice">
+    <h1>index</h1>
+    <form action="/invoices" method="post">
+        <input type="submit" value="new invoice">
     </form>
-    <form action="/customers" method="post">
-        <input type="submit" value="Customers">
+    <form action="/customers" method="get">
+        <input type="submit" value="customers">
     </form>
     {{ if ne .ErrorMessage "" }}
         <p>{{ .ErrorMessage }}</p>
