@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -45,13 +46,16 @@ func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/invoices", newInvoiceHandler)
 	http.HandleFunc("/customers", customerHandler)
+	http.HandleFunc("/customers/edit", editCustomerHandler)
+	http.HandleFunc("/customers/", editCustomerFormHandler)
+	http.HandleFunc("/customers/save", saveCustomerHandler)
 	http.ListenAndServe(":8080", nil)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{}
 
-	data.ErrorMessage = "This is an error message. Nothing is wrong."
+	data.ErrorMessage = "This is an error message, but nothing is wrong."
 
 	tpl.ExecuteTemplate(w, "index.gohtml", data)
 }
@@ -137,4 +141,105 @@ func customerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("default case")
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+func editCustomerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	customerID := r.URL.Query().Get("id")
+	if customerID == "" {
+		http.Error(w, "Bad Request: Missing customer ID", http.StatusBadRequest)
+		return
+	}
+
+	// Fetch customer details from the database based on the provided customer ID
+	row := db.QueryRow("SELECT CustomerID, FirstName, LastName, Email, Phone FROM Customers WHERE CustomerID = ?", customerID)
+	var customer Customer
+	err := row.Scan(&customer.CustomerID, &customer.FirstName, &customer.LastName, &customer.Email, &customer.Phone)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error fetching customer details:", err)
+		return
+	}
+
+	// Render the edit customer form
+	tpl.ExecuteTemplate(w, "edit_customer.gohtml", customer)
+}
+
+func editCustomerFormHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Extract the customer ID from the URL
+	parts := strings.Split(r.URL.Path, "/")
+	if len(parts) < 3 {
+		http.Error(w, "Bad Request: Missing customer ID", http.StatusBadRequest)
+		return
+	}
+	customerID := parts[2]
+
+	// Fetch customer details from the database based on the provided customer ID
+	row := db.QueryRow("SELECT CustomerID, FirstName, LastName, Email, Phone FROM Customers WHERE CustomerID = ?", customerID)
+	var customer Customer
+	err := row.Scan(&customer.CustomerID, &customer.FirstName, &customer.LastName, &customer.Email, &customer.Phone)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error fetching customer details:", err)
+		return
+	}
+
+	// Render the edit customer form
+	tpl.ExecuteTemplate(w, "edit_customer.gohtml", customer)
+}
+
+func saveCustomerHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	} else {
+		fmt.Println("saveCustomerHandler POST")
+	}
+
+	// Parse form data
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Println("Error parsing form data:", err)
+		return
+	}
+
+	// Extract customer details from the form
+	customerID := r.PostForm.Get("CustomerID")
+	firstName := r.PostForm.Get("EditFirstName")
+	lastName := r.PostForm.Get("EditLastName")
+	email := r.PostForm.Get("EditEmail")
+	phone := r.PostForm.Get("EditPhone")
+
+	fmt.Println(customerID, firstName, lastName, email, phone)
+	// Prepare the SQL query
+	stmt, err := db.Prepare("UPDATE Customers SET FirstName=?, LastName=?, Email=?, Phone=? WHERE CustomerID=?")
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error preparing SQL statement:", err)
+		return
+	}
+	defer stmt.Close()
+
+	// Execute the prepared statement with the provided parameters
+
+	fmt.Println(customerID, firstName, lastName, email, phone)
+	_, err = stmt.Exec(firstName, lastName, email, phone, customerID)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		log.Println("Error updating customer details:", err)
+		return
+	}
+
+	// Redirect back to the customer list page
+	http.Redirect(w, r, "/customers", http.StatusSeeOther)
 }

@@ -7,13 +7,14 @@
     <link rel="stylesheet" href="/../static/styles.css">
 </head>
 <body>
-    <h1>index</h1>
-    <form action="/invoices" method="post" class="customer-form">
-        <input type="submit" value="new invoice">
-    </form>
-    <form action="/customers" method="get" class="customer-form">
-        <input type="submit" value="customers">
-    </form>
+    {{ template "navmenu.gohtml" }}
+    <h1>Index</h1>
+    <!-- <form action="/invoices" method="post" class="customer-form"> -->
+    <!--     <input type="submit" value="new invoice"> -->
+    <!-- </form> -->
+    <!-- <form action="/customers" method="get" class="customer-form"> -->
+    <!--     <input type="submit" value="customers"> -->
+    <!-- </form> -->
     <div class="error-message">
     {{ if ne .ErrorMessage "" }}
         <p>{{ .ErrorMessage }}</p>

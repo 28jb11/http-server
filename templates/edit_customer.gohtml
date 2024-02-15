@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Customer</title>
+    <link rel="stylesheet" href="/../static/styles.css">
+</head>
+<body>
+    <h1>Edit Customer</h1>
+    <form action="/customers/save" method="post" class="customer-form">
+        <input type="hidden" id="CustomerID" name="CustomerID" value="{{ .CustomerID }}">
+        <div class="form-group">
+            <label for="FirstName">First Name:</label>
+            <input type="text" id="FirstName" name="EditFirstName" value="{{ .FirstName }}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="LastName">Last Name:</label>
+            <input type="text" id="LastName" name="EditLastName" value="{{ .LastName }}" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input type="email" id="Email" name="EditEmail" value="{{ .Email }}" />
+        </div>
+
+        <div class="form-group">
+            <label for="Phone">Phone Number:</label>
+            <input type="tel" id="Phone" name="EditPhone" pattern="^(0[2-5])?[0-9]{8}$" value="{{ .Phone }}" />
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Save" />
+            <a href="/customers">Cancel</a>
+        </div>
+    </form>
+</body>
+</html>
