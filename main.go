@@ -59,9 +59,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 func newInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{}
 
-	data.ErrorMessage = "This is an error message. Nothing is wrong."
+	data.ErrorMessage = "No invoice page yet."
 
-	tpl.ExecuteTemplate(w, "newInvoice.gohtml", data)
+	tpl.ExecuteTemplate(w, "index.gohtml", data)
 }
 
 func customerHandler(w http.ResponseWriter, r *http.Request) {
