@@ -54,24 +54,18 @@ func main() {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{}
-
 	data.ErrorMessage = "This is an error message, but nothing is wrong."
-
 	tpl.ExecuteTemplate(w, "index.gohtml", data)
 }
 
 func newInvoiceHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{}
-
 	data.ErrorMessage = "No invoice page yet."
-
 	tpl.ExecuteTemplate(w, "index.gohtml", data)
 }
 
 func customerHandler(w http.ResponseWriter, r *http.Request) {
 	data := PageData{}
-
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	switch r.Method {
 	case "GET":
@@ -101,7 +95,6 @@ func customerHandler(w http.ResponseWriter, r *http.Request) {
 			customers = append(customers, customer)
 		}
 
-		// Pass the customers to the template
 		tpl.ExecuteTemplate(w, "customers.gohtml", PageData{Customers: customers})
 
 	case "POST":
@@ -136,9 +129,8 @@ func customerHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Redirect to the same endpoint to refresh the page
 		http.Redirect(w, r, "/customers", http.StatusSeeOther)
+
 	default:
-		fmt.Printf("Received unexpected method: %s\n", r.Method)
-		fmt.Println("default case")
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 	}
 }
@@ -165,7 +157,6 @@ func editCustomerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Render the edit customer form
 	tpl.ExecuteTemplate(w, "edit_customer.gohtml", customer)
 }
 
@@ -193,7 +184,6 @@ func editCustomerFormHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Render the edit customer form
 	tpl.ExecuteTemplate(w, "edit_customer.gohtml", customer)
 }
 
@@ -205,7 +195,6 @@ func saveCustomerHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("saveCustomerHandler POST")
 	}
 
-	// Parse form data
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
@@ -220,8 +209,6 @@ func saveCustomerHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.PostForm.Get("EditEmail")
 	phone := r.PostForm.Get("EditPhone")
 
-	fmt.Println(customerID, firstName, lastName, email, phone)
-	// Prepare the SQL query
 	stmt, err := db.Prepare("UPDATE Customers SET FirstName=?, LastName=?, Email=?, Phone=? WHERE CustomerID=?")
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -230,9 +217,6 @@ func saveCustomerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer stmt.Close()
 
-	// Execute the prepared statement with the provided parameters
-
-	fmt.Println(customerID, firstName, lastName, email, phone)
 	_, err = stmt.Exec(firstName, lastName, email, phone, customerID)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -240,6 +224,5 @@ func saveCustomerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Redirect back to the customer list page
 	http.Redirect(w, r, "/customers", http.StatusSeeOther)
 }
